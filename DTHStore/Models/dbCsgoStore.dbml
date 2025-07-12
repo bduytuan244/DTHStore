@@ -1,0 +1,305 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="DTHStore" Class="dbCsgoStoreDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Table Name="dbo.account" Member="accounts">
+    <Type Name="account">
+      <Column Name="account_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="customer_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="game_name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="username" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="password" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="rental_start" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="rental_end" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="price_per_day" Type="System.Decimal" DbType="Decimal(10,2) NOT NULL" CanBeNull="false" />
+      <Column Name="total_price" Type="System.Decimal" DbType="Decimal(21,2)" IsDbGenerated="true" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="is_active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="image_account" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Association Name="customer_account" Member="customer" ThisKey="customer_id" OtherKey="customer_id" Type="customer" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.account_orderdetails" Member="account_orderdetails">
+    <Type Name="account_orderdetail">
+      <Column Name="account_orderdetail_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="account_order_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="rental_duration" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="total_price" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Association Name="account_order_account_orderdetail" Member="account_order" ThisKey="account_order_id" OtherKey="account_order_id" Type="account_order" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.account_orderHistory" Member="account_orderHistories">
+    <Type Name="account_orderHistory">
+      <Column Name="history_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="customer_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="customer_name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="customer_email" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="order_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="total_price" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Association Name="customer_account_orderHistory" Member="customer" ThisKey="customer_id" OtherKey="customer_id" Type="customer" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.account_orders" Member="account_orders">
+    <Type Name="account_order">
+      <Column Name="account_order_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="customer_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="order_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="total_amount" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="is_paid" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="account_order_account_orderdetail" Member="account_orderdetails" ThisKey="account_order_id" OtherKey="account_order_id" Type="account_orderdetail" />
+      <Association Name="customer_account_order" Member="customer" ThisKey="customer_id" OtherKey="customer_id" Type="customer" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.admins" Member="admins">
+    <Type Name="admin">
+      <Column Name="admin_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="admin_name" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="username" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="password" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="email" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="is_active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="price_per_hour" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="specialization" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="admin_image" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="is_online" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="admin_customer" Member="customers" ThisKey="admin_id" OtherKey="selected_trainer_id" Type="customer" />
+      <Association Name="admin_orderdetail" Member="orderdetails" ThisKey="admin_id" OtherKey="admin_id" Type="orderdetail" />
+      <Association Name="admin_OrderHistory" Member="OrderHistories" ThisKey="admin_id" OtherKey="admin_id" Type="OrderHistory" />
+      <Association Name="admin_TrainingOrder" Member="TrainingOrders" ThisKey="admin_id" OtherKey="admin_id" Type="TrainingOrder" />
+      <Association Name="admin_TrainingSession" Member="TrainingSessions" ThisKey="admin_id" OtherKey="admin_id" Type="TrainingSession" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ApplicationForms" Member="ApplicationForms">
+    <Type Name="ApplicationForm">
+      <Column Name="Id_ApplicationForms" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Position" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Degree" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Introduction" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Status" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="CreatedAt" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="customer_ApplicationForm" Member="customer" ThisKey="UserId" OtherKey="customer_id" Type="customer" IsForeignKey="true" DeleteRule="CASCADE" />
+    </Type>
+  </Table>
+  <Table Name="dbo.comments" Member="comments">
+    <Type Name="comment">
+      <Column Name="comment_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="review_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="customer_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="comment_text" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="created_at" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="customer_comment" Member="customer" ThisKey="customer_id" OtherKey="customer_id" Type="customer" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="review_comment" Member="review" ThisKey="review_id" OtherKey="review_id" Type="review" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.customer" Member="customers">
+    <Type Name="customer">
+      <Column Name="customer_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="customer_name" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="username" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="password" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="email" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="address" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="numberphone" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="dob" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="customers_price" Type="System.Decimal" DbType="Decimal(10,2)" CanBeNull="true" />
+      <Column Name="selected_trainer_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="training_schedule" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="total_training_cost" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="is_training_active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="customer_account" Member="accounts" ThisKey="customer_id" OtherKey="customer_id" Type="account" />
+      <Association Name="customer_account_orderHistory" Member="account_orderHistories" ThisKey="customer_id" OtherKey="customer_id" Type="account_orderHistory" />
+      <Association Name="customer_account_order" Member="account_orders" ThisKey="customer_id" OtherKey="customer_id" Type="account_order" />
+      <Association Name="customer_ApplicationForm" Member="ApplicationForms" ThisKey="customer_id" OtherKey="UserId" Type="ApplicationForm" />
+      <Association Name="customer_comment" Member="comments" ThisKey="customer_id" OtherKey="customer_id" Type="comment" />
+      <Association Name="customer_OrderHistory" Member="OrderHistories" ThisKey="customer_id" OtherKey="customer_id" Type="OrderHistory" />
+      <Association Name="customer_order" Member="orders" ThisKey="customer_id" OtherKey="customer_id" Type="order" />
+      <Association Name="customer_review" Member="reviews" ThisKey="customer_id" OtherKey="customer_id" Type="review" />
+      <Association Name="customer_tournament_vote" Member="tournament_votes" ThisKey="customer_id" OtherKey="customer_id" Type="tournament_vote" />
+      <Association Name="customer_TrainingOrder" Member="TrainingOrders" ThisKey="customer_id" OtherKey="customer_id" Type="TrainingOrder" />
+      <Association Name="customer_TrainingSession" Member="TrainingSessions" ThisKey="customer_id" OtherKey="customer_id" Type="TrainingSession" />
+      <Association Name="admin_customer" Member="admin" ThisKey="selected_trainer_id" OtherKey="admin_id" Type="admin" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.orderdetails" Member="orderdetails">
+    <Type Name="orderdetail">
+      <Column Name="orderdetail_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="order_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="admin_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="training_hours" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="price_per_hour" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="total_price" Type="System.Decimal" DbType="Decimal(29,2)" IsDbGenerated="true" CanBeNull="true" UpdateCheck="Never" />
+      <Association Name="admin_orderdetail" Member="admin" ThisKey="admin_id" OtherKey="admin_id" Type="admin" IsForeignKey="true" />
+      <Association Name="order_orderdetail" Member="order" ThisKey="order_id" OtherKey="order_id" Type="order" IsForeignKey="true" DeleteRule="CASCADE" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OrderHistory" Member="OrderHistories">
+    <Type Name="OrderHistory">
+      <Column Name="history_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="order_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="customer_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="admin_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="training_hours" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="total_price" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="order_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="status" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Association Name="admin_OrderHistory" Member="admin" ThisKey="admin_id" OtherKey="admin_id" Type="admin" IsForeignKey="true" />
+      <Association Name="customer_OrderHistory" Member="customer" ThisKey="customer_id" OtherKey="customer_id" Type="customer" IsForeignKey="true" />
+      <Association Name="order_OrderHistory" Member="order" ThisKey="order_id" OtherKey="order_id" Type="order" IsForeignKey="true" DeleteRule="CASCADE" />
+    </Type>
+  </Table>
+  <Table Name="dbo.orders" Member="orders">
+    <Type Name="order">
+      <Column Name="order_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="order_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="customer_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="is_paid" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="is_done" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="is_shipped" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="training_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="total_amount" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Association Name="order_orderdetail" Member="orderdetails" ThisKey="order_id" OtherKey="order_id" Type="orderdetail" />
+      <Association Name="order_OrderHistory" Member="OrderHistories" ThisKey="order_id" OtherKey="order_id" Type="OrderHistory" />
+      <Association Name="order_TrainingSession" Member="TrainingSessions" ThisKey="order_id" OtherKey="order_id" Type="TrainingSession" />
+      <Association Name="customer_order" Member="customer" ThisKey="customer_id" OtherKey="customer_id" Type="customer" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.publisher" Member="publishers">
+    <Type Name="publisher">
+      <Column Name="publisher_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="publisher_name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="publisher_skin" Member="skins" ThisKey="publisher_id" OtherKey="publisher_id" Type="skin" />
+    </Type>
+  </Table>
+  <Table Name="dbo.skins" Member="skins">
+    <Type Name="skin">
+      <Column Name="skin_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="skin_name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="image" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="price" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="update_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="quantity_instock" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="publisher_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="skin_description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="publisher_skin" Member="publisher" ThisKey="publisher_id" OtherKey="publisher_id" Type="publisher" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.reviews" Member="reviews">
+    <Type Name="review">
+      <Column Name="review_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="customer_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="rating" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="review_text" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="review_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="review_comment" Member="comments" ThisKey="review_id" OtherKey="review_id" Type="comment" />
+      <Association Name="customer_review" Member="customer" ThisKey="customer_id" OtherKey="customer_id" Type="customer" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.talk" Member="talks">
+    <Type Name="talk">
+      <Column Name="talk_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="sender_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="receiver_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="sender_type" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="receiver_type" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="message_text" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="sent_at" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="is_read" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.teams" Member="teams">
+    <Type Name="team">
+      <Column Name="team_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="team_name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="team_logo" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="vote_count" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="win_rate" Type="System.Decimal" DbType="Decimal(5,2)" CanBeNull="true" />
+      <Association Name="team_tournament_team" Member="tournament_teams" ThisKey="team_id" OtherKey="team_id" Type="tournament_team" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tournament" Member="tournaments">
+    <Type Name="tournament">
+      <Column Name="tournament_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="tournament_name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="start_date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="end_date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="prize_pool" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="location" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="status" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="winner_team" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Association Name="tournament_tournament_team" Member="tournament_teams" ThisKey="tournament_id" OtherKey="tournament_id" Type="tournament_team" />
+      <Association Name="tournament_tournament_vote" Member="tournament_votes" ThisKey="tournament_id" OtherKey="tournament_id" Type="tournament_vote" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tournament_teams" Member="tournament_teams">
+    <Type Name="tournament_team">
+      <Column Name="tournament_id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="team_id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="group_name" Type="System.Char" DbType="Char(1)" CanBeNull="true" />
+      <Association Name="team_tournament_team" Member="team" ThisKey="team_id" OtherKey="team_id" Type="team" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="tournament_tournament_team" Member="tournament" ThisKey="tournament_id" OtherKey="tournament_id" Type="tournament" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tournament_votes" Member="tournament_votes">
+    <Type Name="tournament_vote">
+      <Column Name="vote_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="tournament_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="customer_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="voted_team" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="vote_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="customer_tournament_vote" Member="customer" ThisKey="customer_id" OtherKey="customer_id" Type="customer" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="tournament_tournament_vote" Member="tournament" ThisKey="tournament_id" OtherKey="tournament_id" Type="tournament" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TrainingOrders" Member="TrainingOrders">
+    <Type Name="TrainingOrder">
+      <Column Name="order_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="admin_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="customer_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="order_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="is_order_completed" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="is_paid" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="training_start_time" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="training_end_time" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="total_amount" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Association Name="admin_TrainingOrder" Member="admin" ThisKey="admin_id" OtherKey="admin_id" Type="admin" IsForeignKey="true" />
+      <Association Name="customer_TrainingOrder" Member="customer" ThisKey="customer_id" OtherKey="customer_id" Type="customer" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TrainingRooms" Member="TrainingRooms">
+    <Type Name="TrainingRoom">
+      <Column Name="room_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="room_name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="is_available" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="room_code" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Association Name="TrainingRoom_TrainingSession" Member="TrainingSessions" ThisKey="room_id" OtherKey="room_id" Type="TrainingSession" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TrainingSessions" Member="TrainingSessions">
+    <Type Name="TrainingSession">
+      <Column Name="session_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="customer_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="admin_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="order_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="room_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="session_date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="session_code" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="status" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Association Name="admin_TrainingSession" Member="admin" ThisKey="admin_id" OtherKey="admin_id" Type="admin" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="customer_TrainingSession" Member="customer" ThisKey="customer_id" OtherKey="customer_id" Type="customer" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="order_TrainingSession" Member="order" ThisKey="order_id" OtherKey="order_id" Type="order" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="TrainingRoom_TrainingSession" Member="TrainingRoom" ThisKey="room_id" OtherKey="room_id" Type="TrainingRoom" IsForeignKey="true" DeleteRule="SET NULL" />
+    </Type>
+  </Table>
+  <Table Name="dbo.weapons" Member="weapons">
+    <Type Name="weapon">
+      <Column Name="weapon_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="weapon_name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="category" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="price" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="damage" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="fire_rate" Type="System.Decimal" DbType="Decimal(5,2)" CanBeNull="true" />
+      <Column Name="recoil" Type="System.Decimal" DbType="Decimal(5,2)" CanBeNull="true" />
+      <Column Name="magazine_size" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="penetration_power" Type="System.Decimal" DbType="Decimal(5,2)" CanBeNull="true" />
+      <Column Name="image_url" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>
